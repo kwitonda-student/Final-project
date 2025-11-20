@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/report_table.dart';
+import 'package:muzuli_app/widgets/report_table.dart';
 
 class ReportingScreen extends StatelessWidget {
   final sample = [

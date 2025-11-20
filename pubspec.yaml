@@ -6,16 +6,12 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.18.0 <3.0.0"
 
-  firebase_core: ^2.4.0
-firebase_auth: ^4.0.0
-cloud_firestore: ^4.0.0
-
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^2.10.0
-  firebase_auth: ^4.4.0
-  cloud_firestore: ^4.9.0
+  firebase_core: ^4.2.1
+  firebase_auth: ^6.1.2
+  cloud_firestore: ^6.1.0
   provider: ^6.0.5
   google_fonts: ^4.0.3
   url_launcher: ^6.1.10

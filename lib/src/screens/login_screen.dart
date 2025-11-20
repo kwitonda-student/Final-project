@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../models/services/services/firebase_service.dart';
+import 'package:muzuli_app/src/services/firebase_service.dart';
 import 'home_screen.dart';
-import '../models/services/models/user_profile.dart';
+import 'package:muzuli_app/src/models/user_profile.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -48,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final bg = DecorationImage(
       image: NetworkImage('https://images.pexels.com/photos/34725871/pexels-photo-34725871.jpeg'),
       fit: BoxFit.cover,
-      colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.35), BlendMode.darken),
+      colorFilter: ColorFilter.mode(Colors.black.withValues(alpha: 0.35), BlendMode.darken),
     );
 
     return Scaffold(

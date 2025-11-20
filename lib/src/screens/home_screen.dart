@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/user_profile.dart';
-import '../widgets/header.dart';
-import '../widgets/footer.dart';
+import 'package:muzuli_app/widgets/header.dart';
+import 'package:muzuli_app/widgets/footer.dart';
 import 'jobs_screen.dart';
 import 'updates_screen.dart';
 import 'about_screen.dart';
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
           image: DecorationImage(
             image: NetworkImage('https://images.pexels.com/photos/6932294/pexels-photo-6932294.jpeg'),
             fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.85), BlendMode.dstATop),
+            colorFilter: ColorFilter.mode(Colors.white.withValues(alpha: 0.85), BlendMode.dstATop),
           ),
         ),
         child: Column(

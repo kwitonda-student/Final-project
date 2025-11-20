@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'src/screens/login_screen.dart';
-import 'src/services/firebase_service.dart';
 import 'package:provider/provider.dart';
-import 'src/widgets/theme_switcher.dart';
+import 'widgets/theme_switcher.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
