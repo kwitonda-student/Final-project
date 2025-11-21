@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import '../models/user_profile.dart';
 import 'package:muzuli_app/widgets/header.dart';
 import 'package:muzuli_app/widgets/footer.dart';
-import 'jobs_screen.dart';
 import 'updates_screen.dart';
 import 'about_screen.dart';
-import 'help_screen.dart';
 import 'reporting_screen.dart';
-import 'private_report_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserProfile profile;
-  HomeScreen({required this.profile});
+  const HomeScreen({super.key, required this.profile});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   int _idx = 0;
-  final pages = <Widget>[];
 
   @override
   void initState() {
@@ -30,9 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(context: context, builder: (_) {
       final ctl = TextEditingController();
       return AlertDialog(
-        title: Text('Search in Muzuli'),
-        content: TextField(controller: ctl, decoration: InputDecoration(hintText: 'Search...')),
-        actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text('Close'))],
+        title: const Text('Search in Career'),
+        content: TextField(controller: ctl, decoration: const InputDecoration(hintText: 'Search...')),
+        actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))],
       );
     });
   }
@@ -41,22 +38,22 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final pageWidgets = [
       _homeTab(),
-      JobsScreen(),
-      UpdatesScreen(),
-      AboutScreen(),
-      HelpScreen(),
-      ReportingScreen(),
-      PrivateReportScreen(),
+       AboutScreen(),
+       ReportingScreen(),
+       UpdatesScreen(),
     ];
 
     return Scaffold(
-      appBar: AppHeader(onSearch: _onSearch),
+      appBar: AppHeader(onSearch: _onSearch, onReporting: () => setState(() => _idx = 2)),
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage('https://images.pexels.com/photos/6932294/pexels-photo-6932294.jpeg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(Colors.white.withValues(alpha: 0.85), BlendMode.dstATop),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.background.withOpacity(0.95),
+            ],
           ),
         ),
         child: Column(
@@ -69,21 +66,24 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _idx,
         type: BottomNavigationBarType.fixed,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        elevation: 8,
         onTap: (i) {
           setState(() => _idx = i);
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.work), label: 'Jobs'),
-          BottomNavigationBarItem(icon: Icon(Icons.update), label: 'Updates'),
           BottomNavigationBarItem(icon: Icon(Icons.info), label: 'About'),
-          BottomNavigationBarItem(icon: Icon(Icons.help), label: 'Help'),
+          BottomNavigationBarItem(icon: Icon(Icons.report), label: 'Reports'),
+          BottomNavigationBarItem(icon: Icon(Icons.update), label: 'Updates'),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.chat),
         onPressed: () async {
-          final url = Uri.parse('https://deepai.org/chat');
+          final url = Uri.parse('https://chat.muzuliapp.com/');
           if (await canLaunchUrl(url)) launchUrl(url);
         },
       ),
@@ -92,22 +92,148 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _homeTab() {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
       child: Column(
         children: [
-          Card(
-            child: ListTile(
-              title: Text('Official Post', style: TextStyle(fontWeight: FontWeight.bold)),
-              subtitle: Text('Posts only for officials'),
+          // Hero Section
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                ],
+              ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(24),
+                bottomRight: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome to Muzuliapp',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Know your rights, claim your rights.',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 12),
-          Card(
-            child: ListTile(
-              title: Text('Position: advertiser and anonymous company'),
-              subtitle: Text('Our client, an on-demand Courier Service that delivers products ordered through their mobile app seeks to recruit a MFC Picker  Location: Nairobi. Send CV to hsjia@gmail.com'),
+          const SizedBox(height: 24),
+          // Featured Content
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Rights that you can claim',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 16),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            Icons.business,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 32,
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Rights and fundamental freedoms',
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Everyone is entitled to all the rights and freedoms set forth in this Declaration, without distinction of any kind. This includes rights such as the right to life, liberty, and security of person. ', 
+                                
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: IconButton(
+                            onPressed: () {
+                              // Navigate to messages screen
+                            },
+                            icon: Icon(
+                              Icons.chat,
+                              color: Theme.of(context).colorScheme.secondary,
+                              size: 32,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Equality and freedom from discrimination',
+                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                ' Every person is equal before the law and has the right to equal protection and equal benefit of the law',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+          const SizedBox(height: 24),
         ],
       ),
     );

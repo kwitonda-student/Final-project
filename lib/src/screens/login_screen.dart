@@ -4,11 +4,13 @@ import 'home_screen.dart';
 import 'package:muzuli_app/src/models/user_profile.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  LoginScreenState createState() => LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> {
   final _form = GlobalKey<FormState>();
   final _nameCtl = TextEditingController();
   final _emailCtl = TextEditingController();
@@ -23,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _loading = true);
     try {
       final user = await _service.signInOrRegister(_emailCtl.text.trim(), _passCtl.text);
-      if (user != null) {
+      if (user != null && mounted) {
         final profile = UserProfile(
           uid: user.uid,
           name: _nameCtl.text.trim(),
@@ -32,13 +34,17 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         await _service.saveUserProfile(profile);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeScreen(profile: profile)));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Auth failed')));
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Auth failed')));
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      }
     } finally {
-      setState(() => _loading = false);
+      if (mounted) {
+        setState(() => _loading = false);
+      }
     }
   }
 
